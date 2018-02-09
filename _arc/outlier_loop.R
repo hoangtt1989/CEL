@@ -1,8 +1,12 @@
 quantile_thresh <- function(inp, lambda) {
+  n <- length(inp)
+  lambda <- min(length(inp), floor(lambda)) ##make sure lambda is an integer, less than or equal to n
   outp <- rep(0, length(inp))
-  inp_dec <- order(abs(inp), decreasing = T)
-  keep_idx <- inp_dec[1:lambda]
-  outp[keep_idx] <- inp[keep_idx]
+  if (lambda > 0) { ##if lambda <= 0, don't do any thresholding
+    inp_dec <- order(abs(inp), decreasing = T)
+    keep_idx <- inp_dec[1:lambda]
+    outp[keep_idx] <- inp[keep_idx]
+  }
   return(outp)
 }
 

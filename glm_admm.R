@@ -160,6 +160,8 @@ CEL_glm_admm <- function(beta_test, X, y, F_reparam = NULL, s_hat_reparam = NULL
   # grad_reparam_lm_AL <- cmpfun(grad_reparam_lm_AL)
   ##
   ##initial parameters
+  tiny <- .Machine$double.eps
+  tiny2 <- tiny^(.25)
   prob_size <- dim(X)
   n <- prob_size[1]
   p <- prob_size[2]
@@ -288,7 +290,7 @@ CEL_glm_admm <- function(beta_test, X, y, F_reparam = NULL, s_hat_reparam = NULL
     gamma_new <- gamma_curr + dual_step * Xtr_R %*% wts_new
     if (gamma_diff_flag) {
       gamma_sc <- max(abs(gamma_curr))
-      gamma_sc <- ifelse(gamma_sc < .Machine$double.eps, .Machine$double.eps * 2, gamma_sc)
+      gamma_sc <- ifelse(gamma_sc < tiny, tiny2, gamma_sc)
       gamma_diff <- max(abs(gamma_new - gamma_curr)) / gamma_sc
     }
     #######
@@ -327,7 +329,7 @@ CEL_glm_admm <- function(beta_test, X, y, F_reparam = NULL, s_hat_reparam = NULL
     outer_fval[j] <- outer_fval_new
     if (outer_tol_type == 'fval') {
       outer_fval_sc <- max(abs(outer_fval_curr))
-      outer_fval_sc <- ifelse(outer_fval_sc < .Machine$double.eps, .Machine$double.eps * 2, outer_fval_sc)
+      outer_fval_sc <- ifelse(outer_fval_sc < tiny, tiny2, outer_fval_sc)
       outer_fval_diff <- abs(outer_fval_new - outer_fval_curr) / abs(outer_fval_sc)
     }
     outer_fval_curr <- outer_fval_new

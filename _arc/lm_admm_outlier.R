@@ -187,7 +187,7 @@ CEL_lm_admm_outlier <- function(X, y, beta_test = NULL, F_reparam = NULL, s_hat_
     ##update beta_diff
     if (beta_diff_flag) {
       beta_sc <- max(abs(beta_curr))
-      beta_sc <- ifelse(beta_sc < .Machine$double.eps, .Machine$double.eps * 2, beta_sc)
+      beta_sc <- ifelse(beta_sc < .Machine$double.eps, .Machine$double.eps^(.25), beta_sc)
       beta_diff <- max(abs(beta_curr - beta_new)) / beta_sc
     }
     ##
@@ -202,7 +202,7 @@ CEL_lm_admm_outlier <- function(X, y, beta_test = NULL, F_reparam = NULL, s_hat_
     gamma_new <- gamma_curr + dual_step * Xtr_R %*% wts_new
     if (gamma_diff_flag) {
       gamma_sc <- max(abs(gamma_curr))
-      gamma_sc <- ifelse(gamma_sc < .Machine$double.eps, .Machine$double.eps * 2, gamma_sc)
+      gamma_sc <- ifelse(gamma_sc < .Machine$double.eps, .Machine$double.eps^(.25), gamma_sc)
       gamma_diff <- max(abs(gamma_new - gamma_curr)) / gamma_sc
     }
     #######
